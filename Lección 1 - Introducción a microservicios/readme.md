@@ -1,6 +1,6 @@
 # Introducción a Microservicios
 
-## Table of Contents
+## Tabla de Contenido
 1. [Antecedentes](#antecedentes)
 2. [Evolución hasta los Microservicios](#evolucion-hasta-los-microservicios)
 3. [Que es un microservicio?](#que-es-un-microservicio)

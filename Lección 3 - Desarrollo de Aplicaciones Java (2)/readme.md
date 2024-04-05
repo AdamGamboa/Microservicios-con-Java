@@ -1,6 +1,6 @@
 # Desarrollo de Aplicaciones Java 
 
-## Table of Contents
+## Tabla de Contenidos
 1. [Principios de diseno](#principios-de-diseno)
 2. [Maven](#maven)
 3. [Unit Tests](#unit-tests)
