@@ -12,11 +12,11 @@
 ### SOLID 
 Siguiendo estos principios podemos crear un código que sea flexible y mantenible en el tiempo. Reduce la complejidad de anadir nuevas funcionalidades, aumenta la reusabilidad de componentes, y mejora la comprensión del código.
 
-**S** - Single Responsability
-**O** - Open/Closed
-**L** - Liskov Sustitution
-**I** - Interface Segregation
-**D** - Dependency Inversion
+- **S** - Single Responsability
+- **O** - Open/Closed
+- **L** - Liskov Sustitution
+- **I** - Interface Segregation
+- **D** - Dependency Inversion
 
 
 ### DRY 
