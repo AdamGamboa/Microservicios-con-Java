@@ -13,10 +13,15 @@
 Siguiendo estos principios podemos crear un código que sea flexible y mantenible en el tiempo. Reduce la complejidad de anadir nuevas funcionalidades, aumenta la reusabilidad de componentes, y mejora la comprensión del código.
 
 - **S** - Single Responsability
+
 - **O** - Open/Closed
+
 - **L** - Liskov Sustitution
+
 - **I** - Interface Segregation
+
 - **D** - Dependency Inversion
+
 
 
 ### DRY 
@@ -331,11 +336,16 @@ En Java, *JUnit* y *TestNG* son las librerías más utilizadas para implementar 
 
 ### Principios FIRST para la escritura de pruebas unitarias
 
-**F**: _Fast_, los test se han de ejecutar rápidamente.
-**I**: _Isolated_, los test se realizan sobre una clase sin interacción con otras.
-**R**: _Repeatable_, el orden de ejecución de los test no debe influir en el resultado final.
-**S**: _Self-validating_, los test se han de ejecutar de modo automático.
-**T**: _Timely_, se han de crear al mismo tiempo que el software que se está creando.
+- **F**: _Fast_, los test se han de ejecutar rápidamente.
+
+- **I**: _Isolated_, los test se realizan sobre una clase sin interacción con otras.
+
+- **R**: _Repeatable_, el orden de ejecución de los test no debe influir en el resultado final.
+
+- **S**: _Self-validating_, los test se han de ejecutar de modo automático.
+
+- **T**: _Timely_, se han de crear al mismo tiempo que el software que se está creando.
+
 
 ### JUnit 
 JUnit se trata de un Framework Open Source para la automatización de las pruebas (tanto unitarias, como de integración) en los proyectos Software. El framework provee al usuario de herramientas, clases y métodos que le facilitan la tarea de realizar pruebas en su sistema y así asegurar su consistencia y funcionalidad.
