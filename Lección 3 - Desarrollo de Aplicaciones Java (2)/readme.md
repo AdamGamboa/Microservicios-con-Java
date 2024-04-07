@@ -448,10 +448,11 @@ Dependiendo de la versión de Maven, o del IDE, puede ser que tenga que agregar 
 ### Parte 2
 
 Usando como base el proyecto `rest-api2`.
-1) Crear un rest controller que permita realizar operaciones CRUD (consultar, crear, modificar, eliminar) para personas.
-    1) Utilizar el Service existente en el proyecto
-    2) Utilizar Postman para consumir los endpoints
-    3) Manejar las excepciones para validaciones o eventos
+1) Crear un rest controller que permita realizar operaciones CRUD (consultar, crear, modificar, eliminar) para usuarios.
+    1) Los endpoints debe estar en la ruta `/api/users`
+    2) Utilizar el Service existente en el proyecto
+    3) Utilizar Postman para consumir los endpoints
+    4) Manejar las excepciones para validaciones o eventos
 
 
 
