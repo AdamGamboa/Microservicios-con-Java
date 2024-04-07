@@ -454,5 +454,7 @@ Usando como base el proyecto `rest-api2`.
     3) Utilizar Postman para consumir los endpoints
     4) Manejar las excepciones para validaciones o eventos
 
+Puede utilizar Postman, e importar la colleción creada para el laboratorio con los llamados a ejecutar para realizar las pruebas al API. 
+
 
 
