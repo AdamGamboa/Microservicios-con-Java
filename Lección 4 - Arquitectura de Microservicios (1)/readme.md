@@ -3,15 +3,25 @@
 ## Tabla de Contenidos
 1. [Introducción](#introducción)
 2. [Principios Rest](#principios-rest)
+
     2.1. [Sin Estado](#sin-estado)
+
     2.2. [Nombres de recursos adecuados](#denominación-y-estructuración-adecuadas-de-los-recursos)
+
     2.3. [Usar los Status code en la respuesta](#usar-los-status-code-en-la-respuesta)
+
     2.4. [Respuesta de error Estandarizados](#respuesta-de-error-estandarizadas)
+
     2.5. [Idempotencia](#idempotencia)
+
 3. [Buenas Prácticas](#buenas-practicas)
+
     3.1. [Generación automática de Documentación](#generación-automática-de-documentación)
+
     3.2. [Autenticación y Autorización](#implementar-autenticación-y-autorización)
+
     3.3. [Versionado](#versionado)
+    
 4. [Práctica](#práctica)
 
 ## Introducción
