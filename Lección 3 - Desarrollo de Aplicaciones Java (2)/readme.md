@@ -52,9 +52,9 @@ Spring AOP es uno de los componente clases de Spring Framework , pero no mucha g
 ### Conceptos en Spring
 
 #### Contexto, Components y Beans
-Una de las carácteristicas de Spring es que se base en el concepto de IoC (Inversion of Control) y DI (Dependency Injection), por ello el ciclo de vida de los instancias es administrada por el Contexto de Spring. Spring se encargará de saber cuando crear una instancia, por cuanto tiempo tenerla disponible, cuando eliminarla, y si la instancia requiere de otros objetos crear dichas dependencias. 
+Una de las carácteristicas de Spring es que se basa en el concepto de IoC (Inversion of Control) y DI (Dependency Injection), por ello el ciclo de vida de los instancias es administrada por el Contexto de Spring. Spring se encargará de saber cuando crear una instancia, por cuanto tiempo tenerla disponible, cuando eliminarla, y si la instancia requiere de otros objetos crear dichas dependencias. 
 
-A estos objetos administrador por el Contexto, se les llama Managed Beans. Los conceptos de Component y Bean hacen referencia a un objeto que es administrado por dicho contexto de Spring. Su diferencia radica en la forma de inicializar dicho objeto. 
+A estos objetos administrados por el Contexto, se les llama Managed Beans. Los conceptos de Component y Bean hacen referencia a un objeto que es administrado por dicho contexto de Spring. Su diferencia radica en la forma de inicializar dicho objeto. 
 
 - `@Component` se utiliza a nivel de clase. Spring generará objetos de dicha clase según sea necesario. 
 
@@ -75,7 +75,6 @@ public class MyConfig {
     public MyComponent myComponent() {
         return new MyComponent();
     }
-
 }
 ```
 
@@ -205,10 +204,194 @@ _Spring Framework:_  No incluye un tool de CLI (Linea de comandos) para desarrol
 _Spring Boot:_ Incluye un CLI tool para desarrollo y testing de aplicaciones.
 
 
+### @SpringBootApplication
+Dado que Spring Boot genera un jar, que inicializa la aplicación Web, el punto de entrada de toda aplicación Spring Boot es una clase con la anotación `@SpringBootApplication` y con un método `public static void main (String [] args)` 
+
+```
+@SpringBootApplication
+public class RestapiApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(RestapiApplication.class, args);
+	}
+
+}
+```
+
+
+
+**`@SpringBootApplication`** es una anotación que combina todas las siguientes:
+
+- `@Configuration`: Marca la clase como una fuente de definición de Beans para el contexto de la aplicación.
+
+- `@EnableAutoConfiguration`: Le indica a Spring comenzar a agregar beans al contexto de la aplcación con lo que tenga en el classPath. Esto incluye los beans definidos por nosotros, así como Beans y Configurations de módulos o librerías externas. 
+
+- `@ComponentScan`: Le indica a Spring buscar `@Component` y `@Configuration` en el package actual y sub-packages. Esta anotación debe de utilizar junto a @Configuration.
 
 
 
 ## Rest API con Spring Boot
+Rest API ha llegado a ser el estandar de facto para la construcción de una aplicación web. Podemos desde el back-end crear un Rest API que expone la lógica de negocio para la capa de presentación (Java Script o movil). Spring Boot permite crear un Rest API de manera muy sencilla. 
+
+Simplemente creamos una clase normal de Java, con métodos, y con anotaciones de Spring la convertimos en un Rest API. Veamos un ejemplo de un Rest API en Spring. 
+
+```
+@RestController
+public class GreetingController {
+
+	private static final String template = "Hello, %s!";
+	private final AtomicLong counter = new AtomicLong();
+
+	@GetMapping("/greeting")
+	public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+		return new Greeting(counter.incrementAndGet(), String.format(template, name));
+	}
+}
+```
+
+### Anotaciones
+
+**`@RestController`**: Esta anotación, marca la clase como un controller, donde cada método retorna un objeto que será convertido a JSON de manera automática. No es necesaria hacer la conversión manual. 
+
+**`@RequestMapping`**: Permite indicar el URL para un método y su verbo HTTP. 
+```
+@RequestMapping(value = "/users", method = RequestMethod.GET)
+public ResponseEntity<?> getUsers(){
+    ... 
+}
+```
+
+
+**`@GetMapping`**:  Anotación para mapear el método a un HTTP *GET*. Está basada en `RequestMapping`. Un `@GetMapping("/users")` es equivalente a `@RequestMapping(value="/users", method = RequestMethod.GET)`. 
+
+**`@PostMapping`**:  Anotación para mapear el método a un HTTP *POST*. Está basada en `RequestMapping`. Un `@PostMapping("/users")` es equivalente a `@RequestMapping(value="/users", method = RequestMethod.POST)`. 
+
+**`@PutMapping`**:  Anotación para mapear el método a un HTTP *PUT*. Está basada en `RequestMapping`. Un `@PutMapping("/users/34")` es equivalente a `@RequestMapping(value="/users/35", method = RequestMethod.PUT)`. 
+
+**`@DeleteMapping`**:  Anotación para mapear el método a un HTTP *DELETE*. Está basada en `RequestMapping`. Un `@DeleteMapping("/users")` es equivalente a `@RequestMapping(value="/users", method = RequestMethod.DELETE)`. 
+
+
+```
+@GetMapping("/{id}")
+public ResponseEntity<?> getBazz(@PathVariable String id){
+    return new ResponseEntity<>(new Bazz(id, "Bazz"+id), HttpStatus.OK);
+}
+
+@PostMapping
+public ResponseEntity<?> newBazz(@RequestParam("name") String name){
+    return new ResponseEntity<>(new Bazz("5", name), HttpStatus.OK);
+}
+
+@PutMapping("/{id}")
+public ResponseEntity<?> updateBazz(
+  @PathVariable String id,
+  @RequestParam("name") String name) {
+    return new ResponseEntity<>(new Bazz(id, name), HttpStatus.OK);
+}
+
+@DeleteMapping("/{id}")
+public ResponseEntity<?> deleteBazz(@PathVariable String id){
+    return new ResponseEntity<>(new Bazz(id), HttpStatus.OK);
+}
+```
+
+
+
+
+**`@RequestParam`**: Se utiliza para extraer "query parameters" del URL del HttpRequest. 
+
+http://localhost:8080/api/users?status=active&limit=10
+
+```
+@GetMapping("/users)
+public List<Users> getUsers(
+    @RequestParam String status, 
+    @RequestParam(name="limit", defaultValue="5") int limit){
+
+}
+```
+- Si `@RequestParam` no tiene el atributo, usará el nombre del parámetro para el queryparameter del url. 
+- Se puede definir un valor por defecto en caso que el URL no contenga dicho query parameter.
+- El tipo del parámetro puede ser un Optional, de manera que si el URL no lo contiene el parámetro será vacío en el Optional. 
+
+**`@PathVariable`**: Permite manejar "templates" de variables en el Path del URL. 
+
+http://localhost:8080/api/employees/42
+```
+@GetMapping("/api/employees/{id}")
+@ResponseBody
+public String getEmployeesById(@PathVariable("id") String employeeId) {
+    return "ID: " + id;
+}
+```
+
+- Si el nombre de la variable es igual al nombre del parámetro en el URL, no es necesario indicar su nombre. 
+
+**`@RequestBody`**: Utilizado recibir el Body del HttpRequest como un objeto de entrada nuestro método. Habilita la deserialización de manera automática, de manera que si el HttpRequest contiene un XML o un JSON, este se transforma a un objeto Java. 
+
+```
+@PostMapping("/user")
+public ResponseEntity saveUser(@RequestBody User user) {
+    userService.saveUser(user);
+    return ResponseEntity.ok(HttpStatus.OK);
+}
+```
+
+**`@ResponseStatus`**: Sirve para indicar un Http Status Code de respuesta al método. Por defecto, si no se indica, se envia un 200 si el método retorna un objeto o 204 si retorna `void`. 
+
+```
+@PostMapping("/user")
+@ResponseStatus(HttpStatus.CREATED) //201
+public User saveUser(@RequestBody User user) {
+    User savedUser = userService.saveUser(user);
+    return savedUser;
+}
+```
+
+### Manejo de Excepciones
+Es muy probable que nuestro API pueda presentar problemas o validaciones que lanzan una excepcion. Por ejemplo si un recurso no es encontrado, devolver un status code 404, y un mensaje de error, o un error 400 (BadRequest) si alguna validación no ha pasado.
+
+Es necesario entonces, comprender algunas de las maneras de realizar Manejo de Excepciones en un Rest API en Spring 
+
+#### ResponseStatusException 
+
+En nuestro método podemos lanzar un excepción `ResponseStatusException`, en donde se indica el HttpStatus code respectivo y un mensaje de error. Spring entiende esta excepción y genera la respectiva respuesta http en nuestro API. 
+
+```
+@GetMapping(value = "/{id}")
+public Foo findById(@PathVariable("id") Long id, HttpServletResponse response) {
+    try {
+        Foo resourceById = RestPreconditions.checkFound(service.findOne(id));
+
+        eventPublisher.publishEvent(new SingleResourceRetrievedEvent(this, response));
+        return resourceById;
+     }
+    catch (MyResourceNotFoundException exc) {
+         throw new ResponseStatusException(
+           HttpStatus.NOT_FOUND, "Foo Not Found", exc);
+    }
+}
+```
+
+Es muy util cuando se requiere un control muy especifico en las respuesta según el comportamiento de nuestro método. 
+
+#### @ControllerAdvice y @ExceptionHandler 
+Esta alternativa es muy útil para manejar excepciones y sus respuesta de manera global en la aplicación. 
+
+```
+@ControllerAdvice
+public class MyEntityExceptionHandler {
+
+    @ExceptionHandler(value = MyValidationException.class)
+    public ResponseEntity<Object> handleConflict(MyValidationException ex) {
+        String bodyOfResponse = "This should be application specific";
+        return new ResponseEntity<>("User not found: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+   
+    }
+}
+```
+
+Se crea una clase que se anota con `@ControllerAdvice` los métodos que contenga y que esten anotados con `@ExceptionHandler` van a mapear cualquier excepción de del tipo indicado que suceda de manera global en los diferentes RestControllers, generando una respuesta según lo programado en el método.
 
 
 ## Spring Initializr
@@ -229,3 +412,46 @@ Este proyecto lo podemos descargar y empezar a utilizar en nuestras máquinas. S
 
 
 ## Prácticas
+
+### Parte 1
+- Usando el Spring Initializr, generar un proyecto Spring Boot 3.2.4, para Java 17, usando maven con empaquetado JAR. Descargarlo e importarlo al IDE. 
+
+- Analizar el código generado. 
+- Iniciar la aplicación con alguna de las opciones: 
+    1) Puede usar el comando `./mvnw clean spring-boot:run` o `mvn clean spring-boot:run`.
+    2) Click derecho en el método `public static void main` de la clase `RestapiApplication` 
+
+- Agregar nuestro primer RestController. 
+
+```
+@RestController
+public class HelloController {
+
+	@GetMapping("/")
+	public String index() {
+		return "Greetings from Spring Boot!";
+	}
+
+}
+```
+
+- Acceder al URL http://localhost:8080/ y ver la respuesta. 
+
+**Troubleshooting**
+Dependiendo de la versión de Maven, o del IDE, puede ser que tenga que agregar las siguientes lineas en el `POM.xml` en la sección de `<properties>`.
+
+```
+<maven.compiler.source>17</maven.compiler.source>
+<maven.compiler.target>17</maven.compiler.target>
+```
+
+### Parte 2
+
+Usando como base el proyecto `rest-api2`.
+1) Crear un rest controller que permita realizar operaciones CRUD (consultar, crear, modificar, eliminar) para personas.
+    1) Utilizar el Service existente en el proyecto
+    2) Utilizar Postman para consumir los endpoints
+    3) Manejar las excepciones para validaciones o eventos
+
+
+
