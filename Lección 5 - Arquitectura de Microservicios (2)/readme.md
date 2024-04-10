@@ -241,7 +241,30 @@ resilience4j.retry.instances.retryFindStock.max-attempts=3
 resilience4j.retry.instances.retryFindStock.wait-duration=1s
 ```
 
+### FallBack
+El método fallback debe estar definido en la misma clase desde donde se aplica el retry. Debe tener el mismo
 Si el método fallara, entonces automáticamente se re-intenta hasta un máximo de 3 veces. Cada re-intento esperará 1 segundo luego del anterior.
+
+```
+@Retry(name = "retryFindStock", fallbackMethod = "findStockFallbackRetry")
+public Stock findStock(long stockId){
+    System.out.println("llamando a FindStock("+stockId+")");
+    ... 
+    ...
+}
+
+
+private Stock findStockFallbackRetry(Long stockId, Exception ex){
+    System.out.println("... Ejecutando Fallback por Retries findStock(stockId:"+stockId+")");
+    var stockInCache = cache.get(stockId);
+    if(stockInCache != null){
+        System.out.println("... Obteniendo Stock desde caché debido a Retries");
+    }
+    return stockInCache;
+}
+```
+
+
 
 ### Circuit Breaker
 De igual manera en un método agregando la anotación `@CircuitBreaker` se puede configurar este patrón, de manera que si continua fallando de manera constante deshabilite la ejecución del método. 
@@ -264,9 +287,107 @@ Descargar el proyecto para la lección. Este se compone de 2 módulos `book-serv
 Al ejecutar el proyecto `book-service` este usará en el puerto 8080. 
 Al ejecutar el proyecto `stock-service` este usará el puerto 8091
 
+### Consumir Rest API
 - Analice el uso de Open Feign, para construir el cliente Rest de Stocks en el proyecto `book-service`.  
 
 - Utilice la colección de Postman adjunta en el laboratorio, para consumir los Rest API de `book-service`, observe como al crear un Book, u obtener libros, este servicio está interactuando con `stock-service`. 
 
-- Analice el manejo de Retries automáticos en el código, haciendo uso de Resilient4J. Analice las entradas agregadas en el archivo `application.properties`.
+```
+GET http://localhost:8080/api/books/1
+{
+    "id": 1,
+    "title": "The Hobbit",
+    "summary": "Lorem ipsum",
+    "author": "J.R.R.Tolkien",
+    "year": 1937,
+    "status": "ACTIVE",
+    "stock": {
+        "id": 1,
+        "currentQuantity": 10
+    }
+}
+```
 
+```
+GET http://locahost:8091/api/stocks/1
+{
+    "id": 1,
+    "currentQuantity": 10
+}
+```
+
+### Fault Tolerance
+
+- Analice el manejo de Retries automáticos en el código, haciendo uso de Resilient4J. Analice las entradas agregadas en el archivo `application.properties`. 
+
+- Ejecutemos un request para obtener un libro.
+```
+GET http://localhost:8080/api/books/1
+{
+    "id": 1,
+    "title": "The Hobbit",
+    "summary": "Lorem ipsum",
+    "author": "J.R.R.Tolkien",
+    "year": 1937,
+    "status": "ACTIVE",
+    "stock": {
+        "id": 1,
+        "currentQuantity": 10
+    }
+}
+```
+- Ahora detengamos el servicio `stock-service`, pero dejemos a `book-service` corriendo (sin detenerlo). Volvamos a acceder al mismo book.
+```
+GET http://localhost:8080/api/books/1
+{
+    "id": 1,
+    "title": "The Hobbit",
+    "summary": "Lorem ipsum",
+    "author": "J.R.R.Tolkien",
+    "year": 1937,
+    "status": "ACTIVE",
+    "stock": {
+        "id": 1,
+        "currentQuantity": 10
+    }
+}
+```
+
+Interesante!!! No se caé, a pesar que dicha operación consume a `stock-service` el cual no está disponible. 
+Veamos los logs en consola, y observemos como al detectar que el método `FindStock` está fallando, luego de varios intentos ejecuta un fallback que retorna datos que tenemos almacenados en una cache. 
+
+Note el tiempo de respuesta (esto es por que está realizando intentos).
+
+``` 
+llamando a FindStock(1)
+llamando a FindStock(1)
+llamando a FindStock(1)
+llamando a FindStock(1)
+... Ejecutando Fallback por Retries
+... Obteniendo Stock desde caché debido a Retries
+```
+
+- Volvamos a iniciar `stock-service`. (Sus datos se eliminaron al detener el servicio, puesto que se almacenan en memoria). Ingresemos directamente a este servicio el stock 
+
+``` 
+POST http://localhost:8091/api/stocks
+{
+    "currentQuantity": 10
+}
+```
+
+Ahora con ambos servicios disponibles, obtengamos el book. 
+```
+GET http://localhost:8080/api/books/1
+```
+y analicemos los logs
+
+```
+llamando a FindStock(stockId:1)
+llamando a FindStock(stockId:1)
+llamando a FindStock(stockId:1)
+```
+Ya no hubo más llamados al fallBack, ni retries. 
+
+---
+> **Podemos concluir que mediante uso de estrategias de tolerancia a fallos, fuimos capaces de tener una degradación suavizada de la aplicación mientras uno de los servicios no estuvo disponible. De manera que la totalidad de la aplicación no se vió impactada durante el evento.**

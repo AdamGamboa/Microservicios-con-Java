@@ -2,20 +2,15 @@
 package com.curso.java.bookservice.service;
 
 import com.curso.java.bookservice.client.stockservice.Stock;
-import com.curso.java.bookservice.client.stockservice.StockClient;
 import com.curso.java.bookservice.client.stockservice.StockUpdate;
 import com.curso.java.bookservice.exceptions.NotFoundException;
 import com.curso.java.bookservice.exceptions.ValidationException;
 import com.curso.java.bookservice.model.Book;
 import com.curso.java.bookservice.model.BookStatus;
 import com.curso.java.bookservice.repository.BookRepository;
-import feign.RetryableException;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,12 +18,12 @@ public class BookService {
     
     private final BookRepository bookRepository;
     
-    private final StockClient stockClient;
+    private final StockService stockService;
     
     @Autowired
-    public BookService(BookRepository bookRepository, StockClient stockClient){
+    public BookService(BookRepository bookRepository, StockService stockService){
         this.bookRepository = bookRepository;
-        this.stockClient =  stockClient;
+        this.stockService =  stockService;
     }
     
     public List<Book> getActiveBooks(){
@@ -36,7 +31,7 @@ public class BookService {
                 .stream()
                 .peek(book -> {
                     if(book.getStock()!= null){
-                        var stock = this.findStock(book.getStock().getId());
+                        var stock = this.stockService.find(book.getStock().getId());
                         if(stock != null){
                             book.setStock(stock);
                         }
@@ -52,7 +47,7 @@ public class BookService {
         });
         
         if(book.getStock()!= null){
-            var stock = this.findStock(book.getStock().getId());
+            var stock = this.stockService.find(book.getStock().getId());
             if(stock != null){
                 book.setStock(stock);
             }
@@ -64,9 +59,9 @@ public class BookService {
         this.validate(book);
         var stock = new Stock();
         stock.setCurrentQuantity(10);
-        var stockResponse = stockClient.save(stock);
-        if(stockResponse.getStatusCode().equals(HttpStatusCode.valueOf(201))){
-            book.setStock(stockResponse.getBody());
+        var stockResponse = stockService.save(stock);
+        if(stockResponse != null){
+            book.setStock(stockResponse);
         }
         return this.bookRepository.save(book);
     }
@@ -85,9 +80,9 @@ public class BookService {
         var book = this.find(bookId);
         
         if(book.getStock() != null){
-            var stockResponse = stockClient.update(stock, book.getStock().getId());
-            if(stockResponse.getStatusCode().equals(HttpStatusCode.valueOf(200))){
-                book.setStock(stockResponse.getBody());
+            var stockResponse = stockService.update(stock, book.getStock().getId());
+            if(stockResponse != null){
+                book.setStock(stockResponse);
             }
         }
     }
@@ -107,25 +102,5 @@ public class BookService {
         }
     }
     
-    @Retry(name = "retryFindStock", fallbackMethod = "fallBackAfterRetryFindStock")
-    @CircuitBreaker(name = "CircuitBreakerService", fallbackMethod = "fallBackAfterCircuitBreakerFindStock" )
-    public Stock findStock(Long stockId){
-        System.out.println("llamando a FindStock("+stockId+")");
-        var stockResponse = stockClient.findStock(stockId);
-        if(stockResponse.getStatusCode().equals(HttpStatusCode.valueOf(200))){
-            return stockResponse.getBody();
-        }
-        return null;
-    }
-    
-    public Stock fallBackAfterRetryFindStock(Long stockId, Exception ex){
-        System.out.println("... Obteniendo Stock desde caché");
-        return null;
-    }
-    
-    public Stock fallBackAfterCircuitBreakerFindStock(long stockId, Exception ex){
-        System.out.println("... Obteniendo Stock desde caché");
-        return null;
-    }
     
 }
