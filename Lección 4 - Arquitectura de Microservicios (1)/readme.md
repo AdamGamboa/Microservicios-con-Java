@@ -21,7 +21,7 @@
     3.2. [Autenticación y Autorización](#implementar-autenticación-y-autorización)
 
     3.3. [Versionado](#versionado)
-    
+
 4. [Práctica](#práctica)
 
 ## Introducción
@@ -57,7 +57,10 @@ Estos métodos son empleados por los clientes para crear, manipular y eliminar d
 
 La denominación y estructuración de recursos son cruciales para crear API REST intuitivas y fáciles de usar. Las siguientes pautas pueden ayudarle a diseñar una estructuración y denominación de recursos efectiva:
 
-- **Utilice sustantivos, no verbos**: en el diseño de API REST, los recursos deben representarse mediante sustantivos, no verbos. Por ejemplo, utilice `"/orders"` en lugar de `"/getOrders"` o `"/createOrder"`. Esto enfatiza el hecho de que se están manipulando recursos y no las acciones en sí.
+- **Utilice sustantivos, no verbos**: en el diseño de API REST, los recursos deben representarse mediante sustantivos, no verbos. Por ejemplo, utilice `"/orders"` en lugar de `"/getOrders"` o `"/createOrder"`. Esto enfatiza el hecho de que se están manipulando recursos y no las acciones en sí. 
+
+    * Incluso en operaciones donde se realiza un acción, como `"/pagar"` o `"/reversar"` se debe de buscar un sustantivo que describa la acción, por ejemplo `"/pago"` o `"/reversion"`. En este caso si es correcto utilizar singular en lugar de plural para el sustantivo. 
+
 
 - **Manténgalo simple y descriptivo:** use nombres que sean fáciles de entender y que transmitan con precisión el significado de un recurso. Por ejemplo, utilice `"/productos"` en lugar de `"/prdcts"` o `"/inventory_items"`. Esto ayuda a crear una API intuitiva que los desarrolladores pueden adoptar rápidamente.
 
@@ -178,5 +181,19 @@ Usando como base el proyecto `principios-rest` creado con Spring Boot vamos a:
     - Aplicar HTTP methods correctamente
     - URL de endpoints según el estandar
     - Status codes retornados según las mejores prácticas
+      - Si no devuelve nada, retornar 204
+      - Si guarda un registro (como los post) retornar un 201 (Created)
+      - Si no encuentra un registro retornar un 404
 
 - Generar una documentación del API usando Open API/Swagger 
+    - Agregar las siguiente dependencia
+    ```
+    <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        <version>2.4.0</version>
+    </dependency>
+    ```
+    - Acceder al URL 
+    http://localhost:8080/swagger-ui/index.html
+
