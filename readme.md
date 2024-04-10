@@ -10,41 +10,42 @@ El curso se centrará en el desarrollo de competencias en el diseño y creación
 ## Temas
 
 ### Tema 1. Introducción a microservicios
-●	Introducción a los microservicios y su arquitectura.
-●	Beneficios y desafíos de los microservicios.
-●	Principios de diseño de microservicios.
-●	Ecosistemas de microservicios.
-●	SOA vs microservicios.
-●	API's y Microservicios.
+
+- Introducción a los microservicios y su arquitectura.
+- Beneficios y desafíos de los microservicios.
+- Principios de diseño de microservicios.
+- Ecosistemas de microservicios.
+- SOA vs microservicios.
+- API's y Microservicios.
 
 ### Tema 2. Desarrollo de Aplicaciones Java
-●	Principios de diseño de software.
-●	Desarrollo de API RESTful utilizando frameworks como Spring Boot.
-●	Gestión de dependencias con Maven o Gradle.
-●	Pruebas unitarias y pruebas de integración. JUnit
+- Principios de diseño de software.
+- Desarrollo de API RESTful utilizando frameworks como Spring Boot.
+- Gestión de dependencias con Maven o Gradle.
+- Pruebas unitarias y pruebas de integración. JUnit
 
 ### Tema 3. Arquitectura de microservicios
-●	Principios REST
-●	Características de los microservicios
-●	Procesos de Comunicación
-●	Manejo de transacciones 
+- Principios REST
+- Características de los microservicios
+- Procesos de Comunicación
+- Manejo de transacciones 
 
 ### Tema 4.  Contenedores y Docker
-●	Introducción a los contenedores 
-●	Conceptos y componentes de Docker.
-●	Creación y gestión de imágenes de Docker.
-●	Despliegue de contenedores Docker.
+- Introducción a los contenedores 
+- Conceptos y componentes de Docker.
+- Creación y gestión de imágenes de Docker.
+- Despliegue de contenedores Docker.
 
 ### Tema 5.  Estrategias de despliegue de microservicios 
-●	Orquestación de contenedores con Docker Compose o Kubernetes.
-●	Monitoreo y registro de microservicios.
-●	Gestión de Configuración y Entrega Continua 
-●	Integración y entrega continuas (CI/CD) utilizando Jenkins o herramientas similares.
-●	Automatización de pruebas y despliegue de microservicios.
+- Orquestación de contenedores con Docker Compose o Kubernetes.
+- Monitoreo y registro de microservicios.
+- Gestión de Configuración y Entrega Continua 
+- Integración y entrega continuas (CI/CD) utilizando Jenkins o herramientas similares.
+- Automatización de pruebas y despliegue de microservicios.
 
 ### Tema 6.  Seguridad y escalabilidad
-●	Principios de seguridad en microservicios.
-●	Autenticación y autorización en microservicios.
-●	Manejo de vulnerabilidades y riesgos.
-●	Escalabilidad y rendimiento de microservicios.
+- Principios de seguridad en microservicios.
+- Autenticación y autorización en microservicios.
+- Manejo de vulnerabilidades y riesgos.
+- Escalabilidad y rendimiento de microservicios.
 
