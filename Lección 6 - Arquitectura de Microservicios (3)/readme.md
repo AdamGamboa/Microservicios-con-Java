@@ -2,7 +2,15 @@
 
 ## Tabla de Contenidos
 1. [Manejo de Transacciones](#manejo-de-transacciones)
-2. [Proyecto](#proyecto)
+
+    1.1. [Patrón Sagas](#patrón-sagas)
+
+    1.2. [Métodos Compensatorios](#métodos-compensatorio)
+
+    1.3. [Patrones de Implementación Sagas](#patrones-de-implementación-de-sagas)
+
+2. [Conclusiones](#conclusiones)   
+3. [Proyecto](#proyecto)
 
 ---
 ## Manejo de Transacciones
@@ -32,6 +40,24 @@ Un metódo o transacción compensatoria, es un método que deshace de manera man
 - Si tengo un método "Realizar Pago", debo tener un método compensatorio "Reversar pago".
 
 Si la Saga falla en la transacción en el paso 4, la aplicación debe deshacer "explicacitamente"  los cambios realizados en los primeros tres pasos mediante la ejecución de sus transacciones compensatorias. Saga ejecuta las transacciones de compensación en el orden inverso a las transacciones previas. 
+
+![Patron sagas2](./imagenes/booking_state_machine.png)
+
+### Patrones de implementación de Sagas
+
+Ahora que tenemos una idea conceptual de qué es el patrón saga, vamos a ver dos patrones a la hora de implementarlo:
+
+**Mediante Coreografía:** Bajo este patrón, tendremos la implementación de la lógica de la misma distribuida a lo largo de los servicios que intervienen (participantes). Cada servicio debe conocer e implementar cómo responder a cierto o ciertos estados (eventos) de la saga.
+
+**Mediante Orquestación:** Habrá un proceso o servicio encargado de la coordinación de los steps de la saga al que llamaremos manager o coordinador de la saga. Este manager aglutina toda la lógica de la saga simplificándola de esta manera y evitando dependencias cíclicas entre servicios.
+
+## Conclusiones
+Estos son los aspectos que debemos tener en cuenta a la hora de implementar nuestro patrón saga:
+
+- Este patrón es aplicable para mantener la consistencia de datos en arquitecturas basadas en microservicios.
+- Es un patrón stateful y necesitaremos mantener el estado persistente.
+- A la hora de implementarlo es aconsejable hacerlo de forma asíncrona basándonos en mensajes.
+- Es necesario tener en cuenta la concurrencia de sagas e implementar contramedidas para solucionar las posibles anomalías.
 
 --- 
 ## Proyecto
