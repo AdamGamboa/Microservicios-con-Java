@@ -133,10 +133,37 @@ Este no expone un rest API a otros servicios, pero se comunica con otros servici
 ![Diagrama](./imagenes/Diagrama-titi-ckets.jpg)
 
 
+### Base de datos
+Debe de crearse una base de datos nueva para cada servicio. Para trabajo local al inicio del proyecto se podría trabajar con un instalación de MySQL donde se tienen diferentes bases de datos. Sin embargo, para la entrega final, cada base de datos va a ser independiente, haciendo uso de un orquestador tipo Docker-Compose o Kubernetes. 
+
+### Instrucciones
+
+Utilice el proyecto `titickets` como base para iniciar su código. Este proyecto ya posee un esqueleto de los diferentes microservicios que conforma la aplicación **Titi-ckets**.  
+
+Este proyecto utiliza herramientas como: 
+- SpringBoot
+- Spring Data JPA
+- Flyway
+- Spring Open Feign
+- Swagger
+- Spring Actuator
+- Resilience4J 
+
+Que serán complementandos con 
+- Docker
+- Docker Compose
+- Kubernetes
+
+Utilice los conceptos de Micro Servicios adquiridos durante las lecciones para completar lo solicitado.
+
+
 ### Entrega
 Este proyecto debe estar terminado para el día correspondiente a la lección 12. El objetivo es que durante los siguientes días previos a la fecha de entrega, cada estudiante vaya avanzando en el proyecto agregando funcionalidades con los conocimientos ya adquiridos, y los conocimientos por adquierir en las siguientes lecciones.
 
 Debe ser presentado y diferentes elementos serán discutidos durante su presentación para conocer el nivel de conocimiento y completitud de la solución entregada. 
+
+
+
 
 
 

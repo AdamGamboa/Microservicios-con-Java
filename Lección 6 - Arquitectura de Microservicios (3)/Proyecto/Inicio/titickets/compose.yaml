@@ -1,0 +1,71 @@
+version: '3.3'
+
+services:
+  events_db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'event_service'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'password'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+    # Where our data will be persisted
+    volumes:
+      - events-db:/var/lib/mysql
+
+  users_db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'user_service'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'password'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - '3307:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+    # Where our data will be persisted
+    volumes:
+      - users-db:/var/lib/mysql
+
+  orders_db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'orders_service'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'password'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - '3308:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+    # Where our data will be persisted
+    volumes:
+      - orders-db:/var/lib/mysql
+
+# Names our volume
+volumes:
+  events-db:
+  users-db:
+  orders-db:
