@@ -3,7 +3,7 @@
 ## Tabla de Contenidos
 1. [Introducción](#introducción)
 2. [Docker Compose](#docker-compose)   
-3. [Proyecto](#proyecto)
+3. [Kubernetes](#kubernetes)
 4. [Práctica](#práctica)
 
 ## Introducción
