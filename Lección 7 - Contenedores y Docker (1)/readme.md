@@ -1,12 +1,16 @@
-# Arquitectura de Microservicios
+# Contenedores y Docker
 
 ## Tabla de Contenidos
 
 
 1. [Introducción a los contenedores](#introducción-a-los-contenedores)
+
     1.1. [Contenenedores vs Máquinas Virtuales](#contenedores-vs-máquinas-virtuales)
+
     1.2. [Qué es Docker?](#que-es-docker)
+
     1.3. [Alternativas a Docker](#alternativas-a-docker)
+
 2. [Conceptos y componentes de Docker](#conceptos-y-componentes-de-docker)   
 3. [Directivas en un Dockerfile](#directivas-en-un-dockerfile)
 

@@ -1,10 +1,12 @@
-# Arquitectura de Microservicios
+# Contenedores y Docker
 
 ## Tabla de Contenidos
 
 1. [Creación y gestión de imágenes de Docker](#creación-y-gestión-de-imágenes-de-docker)
-2. [Despliegue de contenedores Docker](#despliegue-de-contenedores-docker)   
-3. [Práctica](#practica)
+2. [Despliegue de contenedores Docker](#despliegue-de-contenedores-docker)  
+3. [Multi-Stage Builds](#multi-stage-builds)
+4. [Consejos y Buenas Prácticas](#consejos-y-buenas-prácticas) 
+5. [Práctica](#práctica)
 
 
 
