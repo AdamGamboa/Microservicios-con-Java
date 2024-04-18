@@ -379,8 +379,11 @@ $ docker-compose up -d
 ```
 
 Utilice la Postman, para acceder a los URL y comprobar el funcionamiento de la aplicacion. 
-En este punto, con un solo comando iniciamos 2 microservicios, y sus respectivas bases de datos. 
+En este punto, con un solo comando iniciamos 2 microservicios, y sus respectivas bases de datos.
 
+Podemos acceder a: 
+- Book Service : http://localhost:8091/
+- Stock Service : http://localhost:8092/
 
 ### Docker Compose Escalabilidad
 
@@ -468,6 +471,10 @@ final-stock-service-1   "java -jar stock-ser…"   stock-service       running  
 final-stock_db-1        "docker-entrypoint.s…"   stock_db            running             0.0.0.0:3307->3306/tcp
 ```
 
+
+Podemos acceder a: 
+- Book Service : http://localhost:8091/    (a traves de NGINX que distribuye a los servicios)
+- Stock Service : http://localhost:8092/
 
 
 
