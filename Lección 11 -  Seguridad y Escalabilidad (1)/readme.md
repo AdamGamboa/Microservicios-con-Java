@@ -83,6 +83,27 @@ De nuevo Spring Framework ya un módulo disponible para la implementación de Se
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
 </dependency>
+
+
+<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.11.5</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.11.5</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.11.5</version>
+</dependency>
+
 ```
 
 2) Crear una clase que contiene datos del usuario
@@ -131,7 +152,7 @@ public class JwtService {
 
     public Boolean validateToken(String token) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username != null && !isTokenExpired(token));
     }
 
     private Key getSignKey() {
@@ -170,7 +191,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 Principal principal = new Principal();
                 principal.setUsername(username);
                 principal.setExpiration(expiration);
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, null);
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
@@ -302,6 +323,17 @@ Esto nos permitirá reaccionar de manera ágil cuando se detecta un volumen alto
 
 ## Práctica
 ### Spring Security
+
+Utilice el proyecto para la leccion, ubicado en la carpeta `/Laboratorios/secured-rest` para ver un ejemplo de un Rest API con seguridad por medio de JWT. 
+
+- El endpoint `api/v1/login` recibe un usuario y contrasena, y en caso de ser validos genera un JWT token. 
+
+- Los APIs para users `api/users/**` pueden ser utilizados sin necesidad de un JWT como header de autenticacion.
+
+- Los APIs para books `api/books/**` requieren de un JWT valido, de otra manera retorna un 403. 
+
+Analice el codigo generado y su funcionamiento. Realice pruebas desde POSTMAN.
+
 
 
 
