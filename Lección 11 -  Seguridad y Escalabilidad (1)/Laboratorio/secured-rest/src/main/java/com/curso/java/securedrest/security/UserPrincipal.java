@@ -15,16 +15,19 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        System.out.println("UserPrincipal.getAuthorities");
         return List.of();
     }
 
     @Override
     public String getPassword() {
+        System.out.println("UserPrincipal.getPassword");
         return new StringBuilder(username).reverse().toString();
     }
 
     @Override
     public String getUsername() {
+        System.out.println("UserPrincipal.getUsername");
         return username;
     }
 
